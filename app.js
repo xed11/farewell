@@ -195,89 +195,83 @@
       }
     });
 
+    // Touchend-only swipe detection. No touchmove handlers and no live
+    // dragging — those interrupt native momentum and nudge the scrollbar
+    // after the page should have stopped.
     let startX = 0;
     let startY = 0;
-    let deltaX = 0;
-    let axis = null; // "x" | "y" | null
     let tracking = false;
-
-    const onStart = (clientX, clientY) => {
-      tracking = true;
-      axis = null;
-      startX = clientX;
-      startY = clientY;
-      deltaX = 0;
-      messageList.classList.add("is-dragging");
-      messageDeck.classList.add("is-dragging");
-    };
-
-    const onMove = (clientX, clientY, event) => {
-      if (!tracking) return;
-      const dx = clientX - startX;
-      const dy = clientY - startY;
-
-      if (axis === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
-        axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-      }
-
-      if (axis === "x") {
-        if (event && event.cancelable) event.preventDefault();
-        deltaX = dx;
-        const width = deckViewport.clientWidth || 1;
-        const offset = (-currentIndex * 100) + (dx / width) * 100;
-        messageList.style.transform = `translate3d(${offset}%, 0, 0)`;
-      }
-    };
-
-    const onEnd = () => {
-      if (!tracking) return;
-      tracking = false;
-      messageList.classList.remove("is-dragging");
-      messageDeck.classList.remove("is-dragging");
-
-      if (axis === "x" && Math.abs(deltaX) > 45) {
-        if (deltaX < 0) goTo(currentIndex + 1);
-        else goTo(currentIndex - 1);
-      } else {
-        goTo(currentIndex);
-      }
-
-      axis = null;
-      deltaX = 0;
-    };
 
     deckViewport.addEventListener(
       "touchstart",
       (event) => {
         const touch = event.touches[0];
-        onStart(touch.clientX, touch.clientY);
+        if (!touch) return;
+        tracking = true;
+        startX = touch.clientX;
+        startY = touch.clientY;
+      },
+      { passive: true }
+    );
+
+    const finishSwipe = (clientX, clientY) => {
+      if (!tracking) return;
+      tracking = false;
+
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+
+      // Only change cards on a clear horizontal flick.
+      if (Math.abs(dx) < 56) return;
+      if (Math.abs(dx) <= Math.abs(dy) * 1.25) return;
+
+      if (dx < 0) goTo(currentIndex + 1);
+      else goTo(currentIndex - 1);
+    };
+
+    deckViewport.addEventListener(
+      "touchend",
+      (event) => {
+        const touch = event.changedTouches[0];
+        if (!touch) {
+          tracking = false;
+          return;
+        }
+        finishSwipe(touch.clientX, touch.clientY);
       },
       { passive: true }
     );
 
     deckViewport.addEventListener(
-      "touchmove",
-      (event) => {
-        const touch = event.touches[0];
-        onMove(touch.clientX, touch.clientY, event);
+      "touchcancel",
+      () => {
+        tracking = false;
       },
-      { passive: false }
+      { passive: true }
     );
 
-    deckViewport.addEventListener("touchend", onEnd, { passive: true });
-    deckViewport.addEventListener("touchcancel", onEnd, { passive: true });
+    // Desktop: click-drag still works via mouse, evaluated on mouseup only.
+    let mouseTracking = false;
+    let mouseStartX = 0;
+    let mouseStartY = 0;
 
-    // Mouse drag for desktop preview
     deckViewport.addEventListener("mousedown", (event) => {
-      onStart(event.clientX, event.clientY);
+      if (event.button !== 0) return;
+      mouseTracking = true;
+      mouseStartX = event.clientX;
+      mouseStartY = event.clientY;
     });
 
-    window.addEventListener("mousemove", (event) => {
-      if (!tracking) return;
-      onMove(event.clientX, event.clientY, event);
+    window.addEventListener("mouseup", (event) => {
+      if (!mouseTracking) return;
+      mouseTracking = false;
+      const dx = event.clientX - mouseStartX;
+      const dy = event.clientY - mouseStartY;
+      if (Math.abs(dx) < 56) return;
+      if (Math.abs(dx) <= Math.abs(dy) * 1.25) return;
+      if (dx < 0) goTo(currentIndex + 1);
+      else goTo(currentIndex - 1);
     });
-
-    window.addEventListener("mouseup", onEnd);
   }
 
   function renderPhotos(photos) {
@@ -450,58 +444,16 @@
 
   function playCelebration() {
     const layer = document.getElementById("celebration");
-    if (!layer) return;
+    const canvas = document.getElementById("celebrationCanvas");
+    if (!layer || !canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (layer.dataset.active === "true") return;
 
     layer.dataset.active = "true";
-    layer.innerHTML = "";
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
 
     const colors = ["#e88aaa", "#f0b4c8", "#d46b8c", "#ffc2d8", "#f7a0bc", "#ffd0e0"];
-    const kinds = ["heart", "petal", "star"];
-
-    // Hearts, petals, and soft stars falling from above
-    for (let i = 0; i < 24; i += 1) {
-      const wrap = document.createElement("div");
-      wrap.className = "celebration__item is-fall";
-      wrap.style.setProperty("--x", `${3 + Math.random() * 94}%`);
-      wrap.style.setProperty("--delay", `${Math.random() * 8}s`);
-      wrap.style.setProperty("--dur", `${7 + Math.random() * 5}s`);
-      wrap.style.setProperty("--drift", `${-55 + Math.random() * 110}px`);
-      wrap.style.setProperty("--spin", `${120 + Math.random() * 260}deg`);
-
-      const kind = kinds[i % kinds.length];
-      const shape = document.createElement("span");
-      shape.className = `celebration__${kind}`;
-      shape.style.setProperty("--c", colors[i % colors.length]);
-      if (kind === "heart") {
-        const size = Math.round(14 + Math.random() * 12);
-        shape.style.width = `${size}px`;
-        shape.style.height = `${size}px`;
-      }
-      wrap.appendChild(shape);
-      layer.appendChild(wrap);
-    }
-
-    // A few hearts / petals / stars also drifting gently upward
-    for (let i = 0; i < 10; i += 1) {
-      const wrap = document.createElement("div");
-      wrap.className = "celebration__item is-balloon";
-      wrap.style.setProperty("--x", `${6 + Math.random() * 88}%`);
-      wrap.style.setProperty("--delay", `${Math.random() * 9}s`);
-      wrap.style.setProperty("--dur", `${9 + Math.random() * 5}s`);
-      wrap.style.setProperty("--drift", `${-45 + Math.random() * 90}px`);
-      wrap.style.setProperty("--spin", `${-24 + Math.random() * 48}deg`);
-
-      const kind = kinds[i % kinds.length];
-      const shape = document.createElement("span");
-      shape.className = `celebration__${kind}`;
-      shape.style.setProperty("--c", colors[(i + 2) % colors.length]);
-      wrap.appendChild(shape);
-      layer.appendChild(wrap);
-    }
-
-    // A few circular balloons rising (1–3 at a time)
     const balloonColors = [
       "#e88aaa",
       "#ff8fb5",
@@ -510,25 +462,284 @@
       "#7fd6c2",
       "#ffb347",
     ];
-    for (let i = 0; i < 3; i += 1) {
-      const size = Math.round(60 + Math.random() * 40); // 60–100px
-      const wrap = document.createElement("div");
-      wrap.className = "celebration__item is-balloon";
-      wrap.style.setProperty("--x", `${12 + i * 28 + Math.random() * 10}%`);
-      wrap.style.setProperty("--delay", `${i * 3.4 + Math.random() * 1.2}s`);
-      wrap.style.setProperty("--dur", `${11 + Math.random() * 3}s`);
-      wrap.style.setProperty("--drift", `${-40 + Math.random() * 80}px`);
-      wrap.style.setProperty("--spin", `${-5 + Math.random() * 10}deg`);
+    const kinds = ["heart", "petal", "star"];
 
-      const balloon = document.createElement("span");
-      balloon.className = "celebration__balloon";
-      balloon.style.setProperty("--c", balloonColors[i % balloonColors.length]);
-      balloon.style.setProperty("--size", `${size}px`);
-      balloon.style.width = `${size}px`;
-      balloon.style.height = `${size}px`;
-      wrap.appendChild(balloon);
-      layer.appendChild(wrap);
-    }
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let lastW = 0;
+
+    const syncSize = () => {
+      // Size from layout width; keep a stable tall buffer so mobile browser
+      // chrome show/hide does not resize the particle world mid-flight.
+      const nextW = Math.max(1, Math.round(window.innerWidth));
+      const nextH = Math.max(
+        Math.round(window.innerHeight),
+        Math.round(window.screen?.height || window.innerHeight),
+        640
+      );
+      if (nextW === lastW && canvas.width) return;
+      lastW = nextW;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = nextW;
+      height = nextH;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    syncSize();
+    window.addEventListener("resize", syncSize, { passive: true });
+
+    const particles = [];
+
+    // Random size band: small / medium / big (with a little jitter inside each).
+    const pickSize = (isBalloon) => {
+      const band = Math.floor(Math.random() * 3); // 0 small, 1 medium, 2 big
+      if (isBalloon) {
+        if (band === 0) return 42 + Math.random() * 14; // ~42–56
+        if (band === 1) return 64 + Math.random() * 16; // ~64–80
+        return 88 + Math.random() * 22; // ~88–110
+      }
+      if (band === 0) return 7 + Math.random() * 4; // ~7–11
+      if (band === 1) return 13 + Math.random() * 5; // ~13–18
+      return 20 + Math.random() * 8; // ~20–28
+    };
+
+    const makeFalling = (i) => {
+      const kind = kinds[i % kinds.length];
+      const size = pickSize(false);
+      return {
+        kind,
+        color: colors[i % colors.length],
+        x: Math.random() * width,
+        y: -20 - Math.random() * height,
+        vx: -18 + Math.random() * 36,
+        // Bigger pieces drift a touch slower.
+        vy: (42 + Math.random() * 55) * (size < 12 ? 1.08 : size > 19 ? 0.88 : 1),
+        rot: Math.random() * Math.PI * 2,
+        vr: (-1.2 + Math.random() * 2.4) * (Math.PI / 180) * 60,
+        size,
+        alpha: 0,
+        life: Math.random(),
+      };
+    };
+
+    const makeRising = (i, isBalloon) => {
+      const kind = isBalloon ? "balloon" : kinds[i % kinds.length];
+      const size = pickSize(isBalloon);
+      return {
+        kind,
+        color: isBalloon
+          ? balloonColors[i % balloonColors.length]
+          : colors[(i + 2) % colors.length],
+        x: Math.random() * width,
+        y: height + 30 + Math.random() * height * 0.4,
+        vx: -14 + Math.random() * 28,
+        vy: isBalloon
+          ? -(22 + Math.random() * 28) * (size < 55 ? 1.1 : size > 85 ? 0.85 : 1)
+          : -(28 + Math.random() * 40) * (size < 12 ? 1.08 : size > 19 ? 0.88 : 1),
+        rot: isBalloon ? 0 : Math.random() * Math.PI * 2,
+        vr: isBalloon
+          ? 0
+          : (-0.8 + Math.random() * 1.6) * (Math.PI / 180) * 60,
+        size,
+        alpha: 0,
+        life: Math.random(),
+      };
+    };
+
+    for (let i = 0; i < 24; i += 1) particles.push(makeFalling(i));
+    for (let i = 0; i < 10; i += 1) particles.push(makeRising(i, false));
+    for (let i = 0; i < 3; i += 1) particles.push(makeRising(i, true));
+
+    const drawHeart = (x, y, size, color, rot) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      const s = size / 2;
+      ctx.moveTo(0, s * 0.35);
+      ctx.bezierCurveTo(0, s * -0.3, s * -1.1, s * -0.3, s * -1.1, s * 0.25);
+      ctx.bezierCurveTo(s * -1.1, s * 0.75, 0, s * 1.15, 0, s * 1.45);
+      ctx.bezierCurveTo(0, s * 1.15, s * 1.1, s * 0.75, s * 1.1, s * 0.25);
+      ctx.bezierCurveTo(s * 1.1, s * -0.3, 0, s * -0.3, 0, s * 0.35);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    const drawPetal = (x, y, size, color, rot) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, size * 0.35, size * 0.6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    const drawStar = (x, y, size, color, rot) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      const spikes = 5;
+      const outer = size * 0.55;
+      const inner = size * 0.22;
+      for (let i = 0; i < spikes * 2; i += 1) {
+        const r = i % 2 === 0 ? outer : inner;
+        const a = (i * Math.PI) / spikes - Math.PI / 2;
+        const px = Math.cos(a) * r;
+        const py = Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    };
+
+    const drawBalloon = (x, y, size, color, rot, life = 0) => {
+      const neckY = size * 0.48;
+      const stringLen = size * 0.75 + 28;
+      // Sway left/right only — string always hangs toward the bottom of the screen.
+      const sway = Math.sin(life * 2.4) * 10;
+      const sway2 = Math.sin(life * 2.4 + 1.1) * 7;
+      const startX = x;
+      const startY = y + neckY;
+      const endX = x + sway * 0.85;
+      const endY = startY + stringLen;
+
+      // Soft ribbon / string (world space, always downward)
+      ctx.save();
+      ctx.strokeStyle = "rgba(110, 65, 85, 0.55)";
+      ctx.lineWidth = 1.25;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.bezierCurveTo(
+        startX + sway * 0.35,
+        startY + stringLen * 0.28,
+        startX - sway2 * 0.55,
+        startY + stringLen * 0.62,
+        endX,
+        endY
+      );
+      ctx.stroke();
+
+      // Tiny curl at the free end
+      ctx.beginPath();
+      ctx.moveTo(endX, endY);
+      ctx.quadraticCurveTo(endX + sway * 0.25, endY + 7, endX - 3, endY + 11);
+      ctx.stroke();
+      ctx.restore();
+
+      // Balloon body + knot (may tilt slightly; string stays down)
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+
+      ctx.fillStyle = "#8a3d58";
+      ctx.beginPath();
+      ctx.moveTo(-4.5, neckY - 1);
+      ctx.lineTo(4.5, neckY - 1);
+      ctx.lineTo(0, neckY + 7);
+      ctx.closePath();
+      ctx.fill();
+
+      const grad = ctx.createRadialGradient(
+        -size * 0.2,
+        -size * 0.2,
+        size * 0.05,
+        0,
+        0,
+        size * 0.55
+      );
+      grad.addColorStop(0, "#fff");
+      grad.addColorStop(0.18, color);
+      grad.addColorStop(1, "#b24f6f");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(0, 0, size * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    const recycle = (p) => {
+      const isBalloon = p.kind === "balloon";
+      p.size = pickSize(isBalloon);
+      if (isBalloon || p.vy < 0) {
+        p.x = Math.random() * width;
+        p.y = height + 40 + Math.random() * 80;
+        p.vy = isBalloon
+          ? -(22 + Math.random() * 28) *
+            (p.size < 55 ? 1.1 : p.size > 85 ? 0.85 : 1)
+          : -(28 + Math.random() * 40) *
+            (p.size < 12 ? 1.08 : p.size > 19 ? 0.88 : 1);
+        p.life = 0;
+        p.alpha = 0;
+      } else {
+        p.x = Math.random() * width;
+        p.y = -30 - Math.random() * 60;
+        p.vy =
+          (42 + Math.random() * 55) *
+          (p.size < 12 ? 1.08 : p.size > 19 ? 0.88 : 1);
+        p.life = 0;
+        p.alpha = 0;
+      }
+    };
+
+    let last = performance.now();
+    const tick = (now) => {
+      // Particle motion is time-based only — never reads scroll position.
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i += 1) {
+        const p = particles[i];
+        p.life += dt;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.rot += p.vr * dt;
+
+        if (p.life < 0.45) p.alpha = Math.min(1, p.life / 0.45);
+        else if (p.kind === "balloon" ? p.y < height * 0.12 : p.y > height * 0.88) {
+          p.alpha = Math.max(0, p.alpha - dt * 1.4);
+        } else {
+          p.alpha = 0.92;
+        }
+
+        const off =
+          p.y > height + 80 ||
+          p.y < -80 ||
+          p.x < -80 ||
+          p.x > width + 80 ||
+          p.alpha <= 0;
+        if (off) {
+          recycle(p);
+          continue;
+        }
+
+        ctx.globalAlpha = p.alpha;
+        if (p.kind === "heart") drawHeart(p.x, p.y, p.size, p.color, p.rot);
+        else if (p.kind === "petal") drawPetal(p.x, p.y, p.size, p.color, p.rot);
+        else if (p.kind === "star") drawStar(p.x, p.y, p.size, p.color, p.rot);
+        else drawBalloon(p.x, p.y, p.size, p.color, p.rot, p.life);
+      }
+
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
   }
 
   function setupAudio() {
@@ -636,32 +847,9 @@
     }
   }
 
-  function setupParallax() {
-    const media = document.querySelector(".hero__photo");
-    if (!media || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    let ticking = false;
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          const y = Math.min(window.scrollY, 420);
-          media.style.transform = `scale(1.08) translate3d(0, ${y * 0.12}px, 0)`;
-          ticking = false;
-        });
-      },
-      { passive: true }
-    );
-  }
-
   async function init() {
     setupHeroPhotoFallback();
     setupAudio();
-    setupParallax();
     setupLightbox();
     renderMessages();
 
