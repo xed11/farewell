@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#e88aaa" />
+    <meta
+      name="description"
+      content="A farewell card for Jessica from her colleagues."
+    />
+    <title>Farewell, Jessica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="celebration" id="celebration" aria-hidden="true"></div>
+
+    <div class="welcome-gate" id="welcomeGate" hidden>
+      <button type="button" class="welcome-gate__btn" id="welcomeOpen">
+        <span class="welcome-gate__eyebrow">A farewell for</span>
+        <span class="welcome-gate__title">Jessica</span>
+        <span class="welcome-gate__cta">Tap to open</span>
+      </button>
+    </div>
+
+    <button
+      class="audio-toggle"
+      type="button"
+      id="audioToggle"
+      aria-pressed="false"
+      aria-label="Pause music"
+    >
+      <span class="audio-toggle__icon" aria-hidden="true">♪</span>
+      <span class="audio-toggle__label">Music</span>
+    </button>
+    <audio id="bgMusic" src="audio/jessica.mp3" loop preload="auto"></audio>
+
+    <header class="hero" id="top">
+      <div class="hero__media">
+        <img
+          class="hero__photo"
+          src="images/jessica.jpg"
+          alt="Jessica"
+          id="jessicaPhoto"
+          data-fallback="images/jessica.svg"
+        />
+        <div class="hero__veil" aria-hidden="true"></div>
+      </div>
+      <div class="hero__content">
+        <p class="hero__eyebrow reveal">With love from your team</p>
+        <h1 class="hero__title reveal">Jessica</h1>
+        <p class="hero__subtitle reveal">
+          A farewell from your colleagues<br />
+          <span lang="pt">Uma despedida dos seus colegas</span>
+        </p>
+        <a class="hero__cta reveal" href="#messages">Read our messages</a>
+      </div>
+      <div class="hero__scroll" aria-hidden="true">
+        <span></span>
+      </div>
+    </header>
+
+    <main>
+      <section
+        class="section messages"
+        id="messages"
+        aria-labelledby="messages-title"
+      >
+        <div class="section__intro">
+          <h2 id="messages-title" class="section__title reveal">
+            Messages for you
+          </h2>
+          <p class="section__lead reveal">
+            Swipe left to read the next note from your colleagues.
+          </p>
+        </div>
+
+        <div class="deck reveal" id="messageDeck" hidden>
+          <div class="deck__meta">
+            <p class="deck__hint" id="deckHint">Swipe for next</p>
+            <p class="deck__counter" id="deckCounter" aria-live="polite">1 / 1</p>
+          </div>
+
+          <div
+            class="deck__viewport"
+            id="deckViewport"
+            tabindex="0"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Colleague messages"
+          >
+            <div class="deck__track" id="messageList"></div>
+          </div>
+
+          <div class="deck__progress" aria-hidden="true">
+            <span class="deck__progress-bar" id="deckProgress"></span>
+          </div>
+
+          <div class="deck__nav">
+            <button type="button" class="deck__btn" id="deckPrev" aria-label="Previous message">
+              ‹
+            </button>
+            <button type="button" class="deck__btn" id="deckNext" aria-label="Next message">
+              ›
+            </button>
+          </div>
+        </div>
+
+        <p class="empty-note reveal" id="messageEmpty" hidden>
+          Messages will appear here once everyone replies.
+        </p>
+      </section>
+
+      <section class="section photos" id="photos" aria-labelledby="photos-title">
+        <div class="section__intro">
+          <h2 id="photos-title" class="section__title reveal">Moments we shared</h2>
+          <p class="section__lead reveal">
+            Tap a photo to view it full screen — swipe for the next one.
+          </p>
+        </div>
+        <div class="photo-rail" id="photoRail" role="list"></div>
+      </section>
+
+      <section class="section closing" id="closing" aria-labelledby="closing-title">
+        <div class="closing__inner reveal">
+          <h2 id="closing-title" class="closing__title">Until we meet again</h2>
+          <p class="closing__text">
+            Compiled with care by Dex &amp; Sandra, from everyone who wanted to
+            say goodbye.
+          </p>
+          <p class="closing__signoff">With love,<br />your colleagues</p>
+        </div>
+      </section>
+    </main>
+
+    <div
+      class="lightbox"
+      id="lightbox"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-label="Photo viewer"
+    >
+      <button type="button" class="lightbox__close" id="lightboxClose" aria-label="Close photo">
+        ×
+      </button>
+      <p class="lightbox__counter" id="lightboxCounter" aria-live="polite">1 / 1</p>
+      <div class="lightbox__viewport" id="lightboxViewport">
+        <div class="lightbox__track" id="lightboxTrack"></div>
+      </div>
+      <p class="lightbox__caption" id="lightboxCaption"></p>
+      <p class="lightbox__hint">Swipe for next</p>
+    </div>
+
+    <script src="messages.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
