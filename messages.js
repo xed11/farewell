@@ -11,37 +11,37 @@ window.FAREWELL_MESSAGES = [
   {
     name: "Sandra",
     lang: "en",
-    text: "It was a joy working with you. Take care, stay brilliant, and keep in touch. We are cheering for you always.",
+    text: "Obrigada jessica por tudo .foste e ès uma pessoa ecrivel e meiga espero tudo de bom nesta tua nova etapa da tua vida . I will miss you so much❤️sandra😘😘",
   },
   {
     name: "Ana",
     lang: "pt",
-    text: "Jessica, desejo tudo de melhor na sua nova jornada. Foi um prazer trabalhar com você. Sucesso sempre!",
+    text: "Jessica, sample message!",
   },
   {
     name: "Miguel",
     lang: "en",
-    text: "You made every shift lighter. Thank you for your kindness, patience, and that smile that always showed up when we needed it.",
+    text: "sample message!.",
   },
   {
     name: "Sofia",
     lang: "pt",
-    text: "Vais fazer falta! Obrigada por seres tão dedicada e por partilhares o teu conhecimento connosco. Boa sorte!",
+    text: "sample",
   },
   {
     name: "Chris",
     lang: "en",
-    text: "Working with you was easy — you always brought clarity and calm. Wherever you go next, they’re lucky to have you.",
+    text: "sample.",
   },
   {
     name: "Rita",
     lang: "pt",
-    text: "Jessica, foste uma colega incrível. Leva connosco as melhores memórias. Abraço grande e sucesso!",
+    text: "Jsample",
   },
   {
     name: "Sample Colleague",
     lang: "en",
-    text: "This is a sample message — replace these with real replies from the team as they come in.",
+    text: "sample.",
   },
 ];
 
