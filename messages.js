@@ -16,17 +16,17 @@ window.FAREWELL_MESSAGES = [
   {
     name: "Ana",
     lang: "pt",
-    text: "Jessica, sample message!",
+    text: "Hi Jessica wishing you the best on your new adventure, good luck, and stay in touch,. thank you for the good times and sweet memories that we shared together, I will miss you, but I'm so happy about what's ahead for you, I wish you all the best my friend. Farewell.",
   },
   {
-    name: "Miguel",
+    name: "Alfredo",
     lang: "en",
-    text: "sample message!.",
+    text: "Oi, linda. Congratulations on your escape! 😂 They are so lucky to have you onboard and don’t forget us when you’re rich and famous….😘😇 It’s been a pleasure working with you sometimes, mate.",
   },
   {
-    name: "Sofia",
+    name: "Titus",
     lang: "pt",
-    text: "sample",
+    text: "Message soon...",
   },
   {
     name: "Chris",
