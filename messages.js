@@ -31,7 +31,7 @@ window.FAREWELL_MESSAGES = [
   {
     name: "Joan",
     lang: "en",
-    text: "sample.",
+    text: "Hi Jessica! Wishing you success on your new adventure! I am sorry to see you go and hope that we will meet again! All the best for your future endeavors. - Joan",
   },
   {
     name: "Lorna",
@@ -41,7 +41,7 @@ window.FAREWELL_MESSAGES = [
   {
     name: "No Name",
     lang: "en",
-    text: "Hi Jessica! Wishing you success on your new adventure! I am sorry to see you go and hope that we will meet again! All the best for your future endeavors.",
+    text: "sample",
   },
 ];
 
