@@ -6,22 +6,22 @@ window.FAREWELL_MESSAGES = [
   {
     name: "Dex",
     lang: "en",
-    text: "Jessica, thank you for being such a wonderful teammate. Wishing you every success in your next chapter — you will be missed!",
+    text: "Jessica, thank you for being such a wonderful teammate. Wishing you every success in your next chapter, you will be missed!",
   },
   {
     name: "Sandra",
     lang: "en",
-    text: "Obrigada jessica por tudo .foste e ès uma pessoa ecrivel e meiga espero tudo de bom nesta tua nova etapa da tua vida . I will miss you so much❤️sandra😘😘",
+    text: "Obrigada jessica por tudo .foste e ès uma pessoa ecrivel e meiga espero tudo de bom nesta tua nova etapa da tua vida . I will miss you so much❤️ - Sandra😘😘",
   },
   {
     name: "Ana",
     lang: "pt",
-    text: "Hi Jessica wishing you the best on your new adventure, good luck, and stay in touch,. thank you for the good times and sweet memories that we shared together, I will miss you, but I'm so happy about what's ahead for you, I wish you all the best my friend. Farewell.",
+    text: "Hi Jessica wishing you the best on your new adventure, good luck, and stay in touch,. thank you for the good times and sweet memories that we shared together, I will miss you, but I'm so happy about what's ahead for you, I wish you all the best my friend. Farewell. - Ana Gonçalves",
   },
   {
     name: "Alfredo",
     lang: "en",
-    text: "Oi, linda. Congratulations on your escape! 😂 They are so lucky to have you onboard and don’t forget us when you’re rich and famous….😘😇 It’s been a pleasure working with you sometimes, mate.",
+    text: "Oi, linda. Congratulations on your escape! 😂 They are so lucky to have you onboard and don’t forget us when you’re rich and famous….😘😇 It’s been a pleasure working with you sometimes, mate. - Alfredo",
   },
   {
     name: "Titus",
@@ -29,19 +29,19 @@ window.FAREWELL_MESSAGES = [
     text: "Message soon...",
   },
   {
-    name: "Chris",
+    name: "Joan",
     lang: "en",
     text: "sample.",
   },
   {
-    name: "Rita",
+    name: "Lorna",
     lang: "pt",
-    text: "Jsample",
+    text: "Dear Jessica. It has been such a pleasure working with you and I will always remember our time together. Wishing you all the best in your new job and looking forward to keeping in touch. Take care! - Lorna xxxx",
   },
   {
-    name: "Sample Colleague",
+    name: "No Name",
     lang: "en",
-    text: "sample.",
+    text: "Hi Jessica! Wishing you success on your new adventure! I am sorry to see you go and hope that we will meet again! All the best for your future endeavors.",
   },
 ];
 
