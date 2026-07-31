@@ -24,10 +24,9 @@ window.FAREWELL_MESSAGES = [
     text: "Oi, linda. Congratulations on your escape! 😂 They are so lucky to have you onboard and don’t forget us when you’re rich and famous….😘😇 It’s been a pleasure working with you sometimes, mate. - Alfredo",
   },
   {
-    name: "Titus",
+    name: "Tito",
     lang: "pt",
-    text: "Wishing you all the very best as you begin this exciting new chapter. It has been a pleasure working alongside you and I will miss having you as a colleague. Thank you for your support, kindness and friendship I hope your new role brings you happiness, success and plenty of new opportunities.keep in touch and don't be a stranger all the best.(ANDAA) No more borrowing iPad 🤣🤣🤣
-TITO.",
+    text: "Wishing you all the very best as you begin this exciting new chapter. It has been a pleasure working alongside you and I will miss having you as a colleague. Thank you for your support, kindness and friendship I hope your new role brings you happiness, success and plenty of new opportunities.keep in touch and don't be a stranger all the best.(ANDAA) No more borrowing iPad 🤣🤣🤣",
   },
   {
     name: "Joan",
