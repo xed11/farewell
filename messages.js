@@ -41,7 +41,7 @@ window.FAREWELL_MESSAGES = [
   {
     name: "Dex",
     lang: "en",
-    text: "❤️😃 Hello Jessica, it's a mix emotions knowing that you're leaving🥹🥹. Remembering how good our night routine was, and how well we understand each other, how each of us worked, and how we perform our role as a team. I'm always grateful and thankful that you were our leader, our senior carer, and a friend for the past three years working together in JB. Your positivity❤️, kindness, thoughfullness, cheerfulness, etc, etc.. are overflowing..❤️ It's really hard to let you go.. Good luck in this new chapter of your career. Keep in touch, and stay the same. We're all gonna missed you. God Bless and we'll see you again.❤️❤️❤️❤️",
+    text: "❤️😃 Hello Jessica, it's a mix emotions knowing that you're leaving🥹🥹. Remembering how good our night routine was, and how well we understand each other, how each of us worked, and how we perform our role as a team. I'm always grateful and thankful that you were our leader, our senior carer, and a friend for the past three years. Your positivity❤️, kindness, thoughfullness, cheerfulness, etc, etc.. are overflowing..❤️ It's really hard to let you go.. Good luck in this new chapter of your career. Keep in touch, and stay the same. We're all gonna missed you. God Bless and we'll see you again.❤️❤️❤️❤️",
   },
 ];
 
