@@ -26,7 +26,8 @@ window.FAREWELL_MESSAGES = [
   {
     name: "Titus",
     lang: "pt",
-    text: "Message soon...",
+    text: "Wishing you all the very best as you begin this exciting new chapter. It has been a pleasure working alongside you and I will miss having you as a colleague. Thank you for your support, kindness and friendship I hope your new role brings you happiness, success and plenty of new opportunities.keep in touch and don't be a stranger all the best.(ANDAA) No more borrowing iPad 🤣🤣🤣
+TITO.",
   },
   {
     name: "Joan",
