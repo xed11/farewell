@@ -6,7 +6,7 @@ window.FAREWELL_MESSAGES = [
   {
     name: "Marcia",
     lang: "en",
-    text: "Jessica, thank you for being such a wonderful teammate. Wishing you every success in your next chapter, you will be missed!",
+    text: "Jessica❤️ it's been a pleasure working with you, and you'll be greatly missed. Thank you for your kindness, support, and all the memories we've shared. While sad to see you go but also excited for your new opportunity. Wishing you every success and happiness in your new role—best of luck for the future! Ahpequenaaaaa😘 Marcia",
   },
   {
     name: "Sandra",
