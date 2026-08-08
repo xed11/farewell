@@ -63,6 +63,11 @@ window.FAREWELL_MESSAGES = [
     lang: "pt",
     text: "Hi Jess, wishing you every success, happiness, and fulfilment in whatever comes next. May this new journey brings you exciting opportunities, good health, and countless wonderful memories for you and your family. We will surely miss here in St. Joseph.— Lehrie",
   },
+  {
+    name: "Rose",
+    lang: "pt",
+    text: "Hi Jessica! Congratulations on your new opportunity! 💐🎉 So happy for you and wishing you lots of luck in your new workplace. I’m sure you’ll do amazing. We’ll miss having you around, but we’re excited for you. Go enjoy the new chapter and try not to work too hard!😍 ❤️ -  ROSE",
+  },
 ];
 
 /**
