@@ -11,7 +11,7 @@ window.FAREWELL_MESSAGES = [
   {
     name: "Dexter",
     lang: "en",
-    text: "❤️😃 To our dearest Jessica, it's a mix emotions knowing that you're leaving🥹🥹. Remembering how good our night routine was, and how we perform our role as a team. I'm always grateful and thankful that you were our leader, our senior carer, and a friend for the past three years. Your positivity❤️, kindness, thoughfullness, cheerfulness, etc.. are amazing!❤️ You will be missed.. Congratulations! and good luck in this new chapter of your career. Keep in touch, and enjoy the new environment.. God Bless and we'll see you again.❤️❤️❤️❤️",
+    text: "❤️😃 To our dearest Jessica, it's a mix emotions knowing that you're leaving🥹🥹. Remembering how good our night routine was, and how we perform our role as a team. I'm always grateful and thankful that you were our leader, our senior carer, and a friend for the past three years. Your positivity❤️, kindness, thoughfullness, cheerfulness, etc.. are amazing!❤️ You will be missed.. Congratulations! and good luck in this new chapter of your career. Keep in touch, and enjoy your new workplace.. God Bless and we'll see you again.❤️❤️❤️❤️",
   },
   {
     name: "Marcia",
